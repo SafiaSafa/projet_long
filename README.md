@@ -8,23 +8,32 @@ date: 01/01/2018
 
 Ce programme permet de génération de score de compatibilité 1D-3D par un algorithme d’apprentissage automatique.
 
+
 Il est nessecaire pour l'utiliser d'installer la suite d'outil PBxplore. Pour cela il faut suivre les instructions suivantes:
-	```
-	cd bin/
-	git clone https://github.com/pierrepo/PBxplore
-    	cd PBxplore
-	pip2 install --user pbxplore
- 	pip2 install pytest
-	python2 setup.py test
-	```
+```{r, engine='bash',count_lines}
+cd bin/
+git clone https://github.com/pierrepo/PBxplore
+cd PBxplore
+pip2 install --user pbxplore
+ pip2 install pytest
+python2 setup.py test
+```
+
+
 Usage: 
-	```
-	python2 projet.py [-h] -i Directory_sequence_to_predict -db Directory_database -output OUTPUT_Directory
-	```
-	exemple: python2 src/scoring.py -i data/ -db data/DB -o Projet_long
+```{r, engine='bash',count_lines}
+python2 projet.py [-h] -i Directory_sequence_to_predict -db Directory_database -output OUTPUT_Directory
+```
+
+
+exemple: python2 src/scoring.py -i data/ -db data/DB -o Projet_long
+
+
 
 Pour plus d'information:
 	python2 scoring.py -h
+
+
 
 Repertoire:
 	- bin : dossier contenant la librairie PBxplore, arpeggio et l'executable Dssp
