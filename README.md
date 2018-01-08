@@ -36,8 +36,13 @@ Pour plus d'information:
 
 
 Repertoire:
+
 	- bin : dossier contenant la librairie PBxplore, arpeggio et l'executable Dssp
+	
 	- data : contient un exemple de fichier pdb pour la prediction et un base de donné contenant 10 pdb issue de HOMSTRAD
+	
 	- doc : pdf du rapport de projet long
+	
 	- Resultat : contient les résultats de l'utilisation du programe sur les données contenu dans data 
+	
 	- src : contient le programe principal scoring.py ainsi que les modules associés
