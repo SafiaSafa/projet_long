@@ -6,7 +6,7 @@ auteur: SAFA-TAHAR-HENNI Safia
 date: 01/01/2018
 
 
-Ce programme permet de génération de score de compatibilité 1D-3D par un algorithme d’apprentissage automatique.
+Ce programme permet de générer de score de compatibilité 1D-3D par un algorithme d’apprentissage automatique.
 
 
 Il est nessecaire pour l'utiliser d'installer la suite d'outil PBxplore. Pour cela il faut suivre les instructions suivantes:
