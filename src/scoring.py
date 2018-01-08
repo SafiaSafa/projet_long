@@ -223,11 +223,11 @@ if __name__ == '__main__':
     init(path_tp,args,repertoire,"vecteur_to_predict.csv")
 
     # #script R
-    # #clustering
-    os.system("./src/clustering.R "+repertoire+"vecteur_db.csv "+repertoire)
+    #clustering
+    os.system("./src/clustering.R "+repertoire+"/vecteur_db.csv "+repertoire)
     # #Prediction
-    os.system("./src/predict.R "+repertoire+"vecteur_db.csv "+repertoire+"vecteur_to_predict.csv "+repertoire)
-    # # Recuperation de moment de la fin d'execution du code
+    os.system("./src/predict.R "+repertoire+"/vecteur_db.csv "+repertoire+"/vecteur_to_predict.csv "+repertoire)
+    # Recuperation de moment de la fin d'execution du code
     fin = time.time()
     print "Duree du programme : {:.2f} secondes".format(fin - debut)
 

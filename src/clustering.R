@@ -54,7 +54,7 @@ fviz_pca_var(MyData.Vector.pca, col.var = "cos2",
   #clusterisation
   #kmeans
     #DETERMINATION NB CLUSTER
-nb_cluster=4
+nb_cluster=3
 fviz_nbclust(MyData.Vector, kmeans, method = "wss")+
   geom_vline(xintercept = nb_cluster, linetype = 2)
     #CALCUL
@@ -85,7 +85,7 @@ colnames(mat)=colnames(fq_obs)
 rownames(mat)=rownames(fq_obs)
 print("Matrice des scores par cluster:")
 print(mat)
-par(mfrow=c(2,2)
+par(mfrow=c(2,2))
 for (i in 1:dim(mat)[2])
 {
   hist(mat[,i],main='Distribution des scores (Méthodes Kmeans)',xlab=paste("Cluster ",i),ylab="Score")
@@ -96,7 +96,7 @@ for (i in 1:dim(mat)[2])
 
 pam.res=pam(MyData.Vector, nb_cluster)
 autoplot(pam.res, frame = TRUE, frame.type = 'norm',main="Clustering par Kmedoid(PAM)")
-plot(silhouette(pam.res),  col = 2:5) 
+
 fviz_silhouette(silhouette(pam.res)) 
 # Compute silhouette
 sil <- silhouette(pam.res)[, 1:3]

@@ -11,7 +11,7 @@ variable <- commandArgs(trailingOnly=TRUE)
 #lecture du fichier csv
 
 MyData <- read.csv(file=variable[1], header=TRUE, sep=";",stringsAsFactors=FALSE)
-#MyData <- read.csv(file="result/test/vecteur_file.csv", header=TRUE, sep=";",stringsAsFactors=FALSE)
+#MyData <- read.csv(file="../result/test/vecteur_db.csv", header=TRUE, sep=";",stringsAsFactors=FALSE)
 
 MyData[is.na(MyData)] <- 0 #remplace les NA (s'il y en as) par des 0
 
