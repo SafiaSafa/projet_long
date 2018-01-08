@@ -18,7 +18,15 @@ pip2 install --user pbxplore
  pip2 install pytest
 python2 setup.py test
 ```
+Pour Arppegio vous aurez besoin des dépendances suivantes (https://bitbucket.org/harryjubb/arpeggio):
 
+-Python (v2.7)
+
+-Numpy
+
+-BioPython (>= v1.60)
+
+-OpenBabel (with Python bindings)
 
 Usage: 
 ```{r, engine='bash',count_lines}
