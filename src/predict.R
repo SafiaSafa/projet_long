@@ -1,4 +1,6 @@
 #!/usr/bin/Rscript --slave
+
+
 #Packages
 # install.packages("rpart")
 # install.packages("rpart.plot")
@@ -34,10 +36,10 @@ MyData_train = MyData
 
 
 #Construction de l'arbre de décision
-target= AA ~SS+ACC+a_PB+b_PB+c_PB+d_PB+e_PB+f_PB+g_PB+h_PB+i_PB+j_PB+k_PB+l_PB+m_PB+n_PB+o_PB+p_PB+polar+ionic+hydrophobic+vdw+hydrogenB  
+target= AA ~H_ss+B_ss+E_ss+G_ss+I_ss+T_ss+S_ss+X._ss+o_ss+o_ss+o_ss+o_ss+o_ss+o_ss+o_ss+o_ss+ACC+a_PB+b_PB+c_PB+d_PB+e_PB+f_PB+g_PB+h_PB+i_PB+j_PB+k_PB+l_PB+m_PB+n_PB+o_PB+p_PB+polar+ionic+hydrophobic+vdw+hydrogenB  
 
 
-#a="result/test/"
+#a="../result/test/"
 a=variable[3]
 pdf(paste(a,"predict.pdf"))
 fq_att=table(MyData$AA)
@@ -67,7 +69,7 @@ rpart.plot(tree_ms10, main = "Prunning: minsplit(nombre minimum d'observations d
 #lecture du fichier csv
 
 MyData_t<- read.csv(file=variable[2], header=TRUE, sep=";",stringsAsFactors=FALSE)
-#MyData_t <- read.csv(file="result/test/vecteur_file.csv", header=TRUE, sep=";",stringsAsFactors=FALSE)
+#MyData_t <- read.csv(file="../result/test/vecteur_to_predict.csv", header=TRUE, sep=";",stringsAsFactors=FALSE)
 
 MyData_t[is.na(MyData_t)] <- 0 #remplace les NA (s'il y en as) par des 0
 
@@ -85,7 +87,7 @@ MyData_t$vdw<-(MyData_t$vdw-mean(MyData_t$vdw))/sd(MyData_t$vdw)
 MyData_t$ionic<-(MyData_t$ionic-mean(MyData_t$ionic))/sd(MyData_t$ionic)
 
 MyData_test = MyData_t
-predictions = predict(tree_ms10, MyData_test)
+predictions = predict(mytree , MyData_test)
 
 vec=NULL
 for (i in 1:dim(predictions)[1])
@@ -98,4 +100,6 @@ print(vec)
 
 print("Vérification de la validité du modèle en l'alignant sur nos données de test.")
 print(table(vec,MyData_t$AA))
+print(sensitivity(vec,MyData_t$AA))
+print(specificity(vec,MyData_t$AA))
 dev.off()

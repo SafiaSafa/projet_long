@@ -76,7 +76,7 @@ def liste_sequence(path_sequences):
     return sequences, liste_PDB, liste_chain
 
 
-def vecteur_binaire(liste_sequences_PB):
+def vecteur_PB(liste_sequences_PB):
     """
         renvoie la conversion d'une séquence de proteines block en liste de vesteur binaire
     """
@@ -113,7 +113,7 @@ def Dssp(pdb,repertoire):
             liste = []
             t=t[1:]
             for ele in t:
-                aa=ele[12:14]
+                aa=ele[13:14]
                 ss=ele[16:17] 
                 if (ss == ' ') or (ss == '-'): 
                     ss = '0'
@@ -125,7 +125,21 @@ def Dssp(pdb,repertoire):
             liste_pdb.append(liste)
     return(liste_pdb)
 
-
+def vecteur_DSSP(liste_sequences_dssp):
+    liste_vecteur = []
+    for j in range(len(liste_sequences_dssp)):
+        for i in range(len(liste_sequences_dssp[j])):
+            liste_v = []
+            vecteur = np.zeros(16)
+            vecteur = vecteur.astype(int)          
+            vecteur[int(liste_sequences_dssp[j][i][1])]=1
+            liste_v.append(liste_sequences_dssp[j][i][0])
+            liste_v.append(tuple(vecteur))            
+            liste_v.append(int(liste_sequences_dssp[j][i][-1]))
+            # print(liste_v)
+            liste_vecteur.append(liste_v)
+    # print(liste_vecteur)
+    return(liste_vecteur)
 
 
 def parse_contact(file):
@@ -182,26 +196,25 @@ def write_csv(liste_vecteur, liste_dssp, liste_arpeggio, args, repertoir,file_na
 
     file = open(fname, "w")
     writer = csv.writer(file, delimiter=';')
-    fieldnames = ['AA','SS','ACC','a_PB','b_PB','c_PB','d_PB','e_PB','f_PB','g_PB','h_PB','i_PB','j_PB','k_PB','l_PB','m_PB','n_PB','o_PB','p_PB','polar', 'ionic', 'hydrophobic', 'vdw', 'hydrogenB']
-    writer.writerow(fieldnames)
 
+    fieldnames = ['AA','H_ss','B_ss', 'E_ss', 'G_ss', 'I_ss','T_ss' , 'S_ss','-_ss','o_ss','o_ss','o_ss','o_ss','o_ss','o_ss','o_ss','o_ss','ACC','a_PB','b_PB','c_PB','d_PB','e_PB','f_PB','g_PB','h_PB','i_PB','j_PB','k_PB','l_PB','m_PB','n_PB','o_PB','p_PB','polar', 'ionic', 'hydrophobic', 'vdw', 'hydrogenB']
+    writer.writerow(fieldnames)
     for i in range(len(liste_vecteur)):
         for j in range(len(liste_vecteur[i])):
-
             if str(liste_vecteur[i][j][-1]) in liste_arpeggio[i].keys():
-                TUPLE=(liste_dssp[i][j] + tuple(liste_vecteur[i][j][0])+tuple(liste_arpeggio[i][str(liste_vecteur[i][j][-1])].values()))
+                TUPLE=(tuple(liste_dssp[j][0])+liste_dssp[j][1]+(liste_dssp[j][-1],)+tuple(liste_vecteur[i][j][0])+tuple(liste_arpeggio[i][str(liste_vecteur[i][j][-1])].values()))
             else:
-                TUPLE=(liste_dssp[i][j] + tuple(liste_vecteur[i][j][0])+tuple(['0','0', '0', '0', '0']))
-
+                TUPLE=(tuple(liste_dssp[j][0])+liste_dssp[j][1]+(liste_dssp[j][-1],)+ tuple(liste_vecteur[i][j][0])+tuple(['0','0', '0', '0', '0']))
             writer.writerow(TUPLE)
     pass
 
 def init(path_data,args,repertoire,file_name):
     sequences, liste_PDB, liste_chain = liste_sequence(path_data)
-    liste_vec = vecteur_binaire(sequences)
+    liste_vec = vecteur_PB(sequences)
     liste_dssp = Dssp(path_data,repertoire)
+    liste_vec_dssp=vecteur_DSSP(liste_dssp)
     liste_arpeggio = arpeggio(path_data)
-    write_csv(liste_vec, liste_dssp,liste_arpeggio, args, repertoire,file_name)
+    write_csv(liste_vec, liste_vec_dssp,liste_arpeggio, args, repertoire,file_name)
 
     pass
 
@@ -224,11 +237,12 @@ if __name__ == '__main__':
 
     # #script R
     #clustering
-    os.system("./src/clustering.R "+repertoire+"/vecteur_db.csv "+repertoire)
-    # #Prediction
-    os.system("./src/predict.R "+repertoire+"/vecteur_db.csv "+repertoire+"/vecteur_to_predict.csv "+repertoire)
+    os.system("./src/clustering.R "+repertoire+"/vecteur_db.csv "+repertoire+" >"+repertoire+"clustering.txt")
+    # # #Prediction
+    os.system("./src/predict.R "+repertoire+"/vecteur_db.csv "+repertoire+"/vecteur_to_predict.csv "+repertoire+" >"+repertoire+"predict.txt")
     # Recuperation de moment de la fin d'execution du code
     fin = time.time()
     print "Duree du programme : {:.2f} secondes".format(fin - debut)
 
 
+# ./src/clustering.R result/test/vecteur_db.csv result/test/

@@ -1,9 +1,9 @@
 #!/usr/bin/Rscript --slave
+
 #Packages
 #install.packages("ggfortify")
-library("ggplot2")
-library("ggfortify")
-
+library(ggplot2)
+library(ggfortify)
 #install.packages("factoextra")
 library(factoextra) # clustering algorithms & visualization
 library(cluster)
@@ -12,7 +12,7 @@ library(cluster)
 variable <- commandArgs(trailingOnly=TRUE)
 
 #lecture du fichier csv
-
+#MyData <- read.csv(file="../result/test/vecteur_db.csv", header=TRUE, sep=";",stringsAsFactors=FALSE)
 MyData <- read.csv(file=variable[1], header=TRUE, sep=";",stringsAsFactors=FALSE)
 
 MyData[is.na(MyData)] <- 0 #remplace les NA (s'il y en as) par des 0
@@ -31,13 +31,13 @@ MyData$vdw<-(MyData$vdw-mean(MyData$vdw))/sd(MyData$vdw)
 MyData$ionic<-(MyData$ionic-mean(MyData$ionic))/sd(MyData$ionic)
 
 #PCA
-
+  #center = TRUE,scale. = TRUE
 MyData.Vector <- MyData[, 2:length(MyData)]
 MyData.AA <- MyData$AA
-MyData.Vector.pca <- prcomp(MyData.Vector,center = TRUE,scale. = TRUE) 
+MyData.Vector.pca <- prcomp(MyData.Vector)
+#a="result/test/"
 a=variable[2]
-
-pdf(paste(a,"clustering.pdf"))
+pdf(paste(a,"cluster.pdf"))
 plot(MyData.Vector.pca, type = "l",main="Variances en fonction des Composantes Principales")
 summary(MyData.Vector.pca)
 
@@ -54,7 +54,7 @@ fviz_pca_var(MyData.Vector.pca, col.var = "cos2",
   #clusterisation
   #kmeans
     #DETERMINATION NB CLUSTER
-nb_cluster=3
+nb_cluster=5
 fviz_nbclust(MyData.Vector, kmeans, method = "wss")+
   geom_vline(xintercept = nb_cluster, linetype = 2)
     #CALCUL
@@ -67,28 +67,30 @@ autoplot(kmeans.result, data = MyData, label = TRUE, label.size = nb_cluster, fr
 
 #calcul fréquences
 #score=log2(fqobs/fqatt)
-fq_obs=table(MyData$AA, kmeans.result$cluster)
-fq_obs_rel=round(prop.table(fq_obs), nb_cluster)#fréquence relative
-fq_att=table(MyData$AA)
-fq_att_rel=round(prop.table(fq_att), nb_cluster)#fréquence relative
+nb_obs=table(MyData$AA, kmeans.result$cluster)
+fq_obs=round(prop.table(nb_obs), nb_cluster)#fréquence 
+nb_att=table(MyData$AA)
+fq_att=round(prop.table(nb_att), nb_cluster)#fréquence 
 
 #matrice score par cluster
-mat <- matrix(nrow=length(fq_att), ncol=nb_cluster)
-for (i in 1:length(fq_att))
+mat <- matrix(nrow=length(nb_att), ncol=nb_cluster)
+for (i in 1:length(nb_att))
 {
   for(j in 1:nb_cluster){
-    a=log2(fq_obs_rel[i,j]/fq_att_rel[i])
+    a=log2(fq_obs[i,j]/fq_att[i])
     mat[i,j]=ifelse(a == -Inf,0,a)
   }
 }
-colnames(mat)=colnames(fq_obs)
-rownames(mat)=rownames(fq_obs)
+colnames(mat)=colnames(nb_obs)
+rownames(mat)=rownames(nb_obs)
 print("Matrice des scores par cluster:")
 print(mat)
-par(mfrow=c(2,2))
+
+
+#par(mfrow=c(2,dim(mat)[2]/2))
 for (i in 1:dim(mat)[2])
 {
-  hist(mat[,i],main='Distribution des scores (Méthodes Kmeans)',xlab=paste("Cluster ",i),ylab="Score")
+  barplot(mat[,i],main='Distribution des scores (Méthodes Kmeans)',xlab=paste("Cluster ",i),ylab="Score",ylim=c(0,-10))
 }
 
   #kmedoid
@@ -96,7 +98,6 @@ for (i in 1:dim(mat)[2])
 
 pam.res=pam(MyData.Vector, nb_cluster)
 autoplot(pam.res, frame = TRUE, frame.type = 'norm',main="Clustering par Kmedoid(PAM)")
-
 fviz_silhouette(silhouette(pam.res)) 
 # Compute silhouette
 sil <- silhouette(pam.res)[, 1:3]
@@ -106,28 +107,28 @@ sil[neg_sil_index, , drop = FALSE]
 
 #calcul fréquences
 #log2(fqobs/fqatt)=score
-fq_obs=table(MyData$AA, pam.res$cluster)
-fq_obs_rel=round(prop.table(fq_obs), nb_cluster)#fréquence relative
-fq_att=table(MyData$AA)
-fq_att_rel=round(prop.table(fq_att), nb_cluster)#fréquence relative
+nb_obs=table(MyData$AA, pam.res$cluster)
+fq_obs=round(prop.table(nb_obs), nb_cluster)#fréquence 
+nb_att=table(MyData$AA)
+fq_att=round(prop.table(nb_att), nb_cluster)#fréquence 
 
 #matrice score par cluster
-mat <- matrix(nrow=length(fq_att), ncol=nb_cluster)
-for (i in 1:length(fq_att))
+mat <- matrix(nrow=length(nb_att), ncol=nb_cluster)
+for (i in 1:length(nb_att))
 {
   for(j in 1:nb_cluster){
-    a=log2(fq_obs_rel[i,j]/fq_att_rel[i])
+    a=log2(fq_obs[i,j]/fq_att[i])
     mat[i,j]=ifelse(a == -Inf,0,a)
   }
 }
-colnames(mat)=colnames(fq_obs)
-rownames(mat)=rownames(fq_obs)
+colnames(mat)=colnames(nb_obs)
+rownames(mat)=rownames(nb_obs)
 print("Matrice des scores par cluster:")
 print(mat)
-par(mfrow=c(2,dim(mat)[2]/2))
+#par(mfrow=c(2,dim(mat)[2]/2))
 for (i in 1:dim(mat)[2])
 {
-  hist(mat[,i],main='Distribution des scores (Méthode PAM)',xlab=paste("Cluster ",i),ylab="Score")
+  barplot(mat[,i],main='Distribution des scores (Méthode PAM)',xlab=paste("Cluster ",i),ylab="Score",ylim=c(0,-10))
 }
 
 dev.off()
