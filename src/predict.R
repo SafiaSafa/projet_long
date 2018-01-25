@@ -6,7 +6,10 @@
 # install.packages("rpart.plot")
 library("rpart")
 library("rpart.plot")
-
+install.packages("caret",
+                 repos = "http://cran.r-project.org", 
+                 dependencies = c("Depends", "Imports", "Suggests"))
+library('caret')
 #Récupération des arguments
 variable <- commandArgs(trailingOnly=TRUE)
 
