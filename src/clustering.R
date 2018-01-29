@@ -7,6 +7,10 @@ library(ggfortify)
 #install.packages("factoextra")
 library(factoextra) # clustering algorithms & visualization
 library(cluster)
+#kohonen library
+install.packages("kohonen")
+library(kohonen)
+
 
 #Récupération des arguments
 variable <- commandArgs(trailingOnly=TRUE)
@@ -53,6 +57,31 @@ fviz_pca_var(MyData.Vector.pca, col.var = "cos2",
 
   #clusterisation
   #kmeans
+test <-function(n,v){
+polar=rownames(table(n, kmeans.result$cluster))
+polar=lapply(polar, as.numeric)
+toto = table(n, kmeans.result$cluster)
+test=matrix(nrow=1, ncol=dim(toto)[2])
+for (i in 1:dim(toto)[2])
+{
+  mat= 0
+  for(j in 1:dim(toto)[1]){
+    coeff=toto[j,i]
+    a=coeff*as.numeric(polar[i])
+    mat=mat+a
+    
+  }
+  test[i]=mat
+}
+sum_polar=sum(test[1,])
+for (i in 1:dim(test)[2]){
+  test[,i]=(as.numeric(test[,i])*100)/sum_polar
+}
+colnames(test)=colnames(nb_obs)
+barplot(test,ylab=v,xlab="Cluster", main= paste(v,"\n Kmeans"))
+
+return(0)
+}
     #DETERMINATION NB CLUSTER
 nb_cluster=5
 fviz_nbclust(MyData.Vector, kmeans, method = "wss")+
@@ -68,7 +97,14 @@ autoplot(kmeans.result, data = MyData, label = TRUE, label.size = nb_cluster, fr
 #calcul fréquences
 #score=log2(fqobs/fqatt)
 nb_obs=table(MyData$AA, kmeans.result$cluster)
-fq_obs=round(prop.table(nb_obs), nb_cluster)#fréquence 
+fq_obs <- matrix(nrow=dim(nb_obs)[1], ncol=nb_cluster)
+for (i in 1:dim(nb_obs)[1])
+{
+  for(j in 1:nb_cluster){
+    a=nb_obs[i,j]/sum(nb_obs[,j])
+    fq_obs[i,j]=a
+  }
+}
 nb_att=table(MyData$AA)
 fq_att=round(prop.table(nb_att), nb_cluster)#fréquence 
 
@@ -92,9 +128,39 @@ for (i in 1:dim(mat)[2])
 {
   barplot(mat[,i],main='Distribution des scores (Méthodes Kmeans)',xlab=paste("Cluster ",i),ylab="Score",ylim=c(0,-10))
 }
-
+test(MyData$ACC,"Accessibilité au solvant (%)")
+test(MyData$polar,"% d'interaction polar")
+test(MyData$ionic," % d'interaction ionic")
+test(MyData$hydrophobic," % d'interaction hydrophobic")
+test(MyData$vdw," % d'interaction van der Waals")
+test(MyData$hydrogenB," % de liaisons hydrogènes")
   #kmedoid
     #Clustering with pam()
+test <-function(n,v){
+polar=rownames(table(n, pam.res$cluster))
+polar=lapply(polar, as.numeric)
+toto = table(n, pam.res$cluster)
+test=matrix(nrow=1, ncol=dim(toto)[2])
+for (i in 1:dim(toto)[2])
+{
+  mat= 0
+  for(j in 1:dim(toto)[1]){
+    coeff=toto[j,i]
+    a=coeff*as.numeric(polar[i])
+    mat=mat+a
+    
+  }
+  test[i]=mat
+}
+sum_polar=sum(test[1,])
+for (i in 1:dim(test)[2]){
+  test[,i]=(as.numeric(test[,i])*100)/sum_polar
+}
+colnames(test)=colnames(nb_obs)
+barplot(test,ylab=v,xlab="Cluster", main= paste(v,"\n Kmedoid"))
+
+return(0)
+}
 
 pam.res=pam(MyData.Vector, nb_cluster)
 autoplot(pam.res, frame = TRUE, frame.type = 'norm',main="Clustering par Kmedoid(PAM)")
@@ -108,7 +174,14 @@ sil[neg_sil_index, , drop = FALSE]
 #calcul fréquences
 #log2(fqobs/fqatt)=score
 nb_obs=table(MyData$AA, pam.res$cluster)
-fq_obs=round(prop.table(nb_obs), nb_cluster)#fréquence 
+fq_obs <- matrix(nrow=dim(nb_obs)[1], ncol=nb_cluster)
+for (i in 1:dim(nb_obs)[1])
+{
+  for(j in 1:nb_cluster){
+    a=nb_obs[i,j]/sum(nb_obs[,j])
+    fq_obs[i,j]=a
+  }
+}
 nb_att=table(MyData$AA)
 fq_att=round(prop.table(nb_att), nb_cluster)#fréquence 
 
@@ -130,5 +203,101 @@ for (i in 1:dim(mat)[2])
 {
   barplot(mat[,i],main='Distribution des scores (Méthode PAM)',xlab=paste("Cluster ",i),ylab="Score",ylim=c(0,-10))
 }
+test(MyData$ACC,"Accessibilité au solvant (%)")
+test(MyData$polar,"% d'interaction polar")
+test(MyData$ionic," % d'interaction ionic")
+test(MyData$hydrophobic," % d'interaction hydrophobic")
+test(MyData$vdw," % d'interaction van der Waals")
+test(MyData$hydrogenB," % de liaisons hydrogènes")
 
+
+
+###########################################"kohonen"
+
+#SOM  Pour 4/9/16/25 groupe
+degrade.bleu <-function(n){
+return(rgb(0,0.4,1,alpha=seq(0,1,1/n)))
+}
+coolBlueHotRed <-function(n, alpha = 1) {
+rainbow(n, end=4/6, alpha=alpha)[n:1]
+}
+
+
+test<-function(n){
+set.seed(100)
+carte <-som(as.matrix(MyData.Vector),grid=somgrid(n,n,"hexagonal"))
+#summary
+print(summary(carte))
+#architecture of the grid
+print(carte$grid)
+
+
+#count plot
+plot(carte,type="count",palette.name=degrade.bleu)
+
+#noeud d’appartenance des observations
+print(carte$unit.classif)
+#nombre d’observations affectés à chaque noeud
+nb <-table(carte$unit.classif)
+print(nb)
+#check if there are empty nodes
+print(length(nb))
+
+#plot distance to neighbours
+plot(carte,type="dist.neighbours")
+
+#codebooks–profils des noeuds
+plot(carte,type="codes",codeRendering = "segments")
+#tableaudes codebooks pour les deux premiers noeuds
+print(carte$codes[[1]][1:2,]) 
+
+#graphique pour chaque variable
+par(mfrow=c(6,4))
+for (j in 1:ncol(MyData.Vector)){
+plot(carte,type="property",property=carte$codes[[1]][,j],palette.name=coolBlueHotRed,main=colnames(MyData.Vector)[j],cex=0.5)
+}
+par(mfrow=c(1,1))
+
+return(0)
+}
+test(2)
+-----------------------------------toroidal-----------------------------
+thor<-function(n){
+set.seed(100)
+carte_tor <-som(as.matrix(MyData.Vector),grid=somgrid(xdim = n, ydim = n, topo =  "hexagonal",
+neighbourhood.fct = "bubble", toroidal = TRUE))
+#summary
+print(summary(carte_tor))
+#architecture of the grid
+print(carte_tor$grid)
+
+#count plot
+plot(carte_tor,type="count",palette.name=degrade.bleu)
+
+#noeud d’appartenance des observations
+print(carte_tor$unit.classif)
+#nombre d’observations affectés à chaque noeud
+nb <-table(carte_tor$unit.classif)
+print(nb)
+#check if there are empty nodes
+print(length(nb))
+
+#plot distance to neighbours
+plot(carte_tor,type="dist.neighbours")
+
+#codebooks–profils des noeuds
+plot(carte_tor,type="codes",codeRendering = "segments")
+#tableaudes codebooks pour les deux premiers noeuds
+print(carte_tor$codes[[1]][1:2,]) 
+
+#graphique pour chaque variable
+par(mfrow=c(6,4))
+for (j in 1:ncol(MyData.Vector)){
+plot(carte_tor,type="property",property=carte_tor$codes[[1]][,j],palette.name=coolBlueHotRed,main=colnames(MyData.Vector)[j],cex=0.5)
+}
+par(mfrow=c(1,1))
+
+return(0)
+}
+thor(2)
 dev.off()
