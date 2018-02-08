@@ -218,38 +218,42 @@ rainbow(n, end=4/6, alpha=alpha)[n:1]
 
 
 test<-function(n){
-set.seed(100)
-carte <-som(as.matrix(MyData.Vector),grid=somgrid(n,n,"hexagonal"))
-#summary
-print(summary(carte))
-#architecture of the grid
-print(carte$grid)
-
-
-#count plot
-plot(carte,type="count",palette.name=degrade.bleu,main=paste("Carte de Kohonen n=",n*n))
-
-#noeud d’appartenance des observations
-print(carte$unit.classif)
-#nombre d’observations affectés à chaque noeud
-nb <-table(carte$unit.classif)
-print(nb)
-#check if there are empty nodes
-print(length(nb))
-
-#plot distance to neighbours
-plot(carte,type="dist.neighbours")
-
-#codebooks–profils des noeuds
-plot(carte,type="codes",codeRendering = "segments")
-#tableaudes codebooks pour les deux premiers noeuds
-print(carte$codes[[1]][1:2,]) 
-
-
-
-par(mfrow=c(1,1))
-
-return(0)
+    set.seed(100)
+    #supprime colonne de zero 
+    SelectVector<-MyData.Vector[, !apply(MyData.Vector == 0, 2, all)]
+    carte <-som(as.matrix(SelectVector),grid=somgrid(n,n,"hexagonal"))
+    #summary
+    print(summary(carte))
+    #architecture of the grid
+    print(carte$grid)
+    
+    
+    #count plot
+    plot(carte,type="count",palette.name=degrade.bleu,main=paste("Carte de Kohonen n=",n*n))
+    
+    #noeud d’appartenance des observations
+    print(carte$unit.classif)
+    #nombre d’observations affectés à chaque noeud
+    nb <-table(carte$unit.classif)
+    print(nb)
+    #check if there are empty nodes
+    print(length(nb))
+    
+    #plot distance to neighbours
+    plot(carte,type="dist.neighbours")
+    
+    #codebooks–profils des noeuds
+    plot(carte,type="codes",codeRendering = "segments")
+    #tableaudes codebooks pour les deux premiers noeuds
+    print(carte$codes[[1]][1:2,]) 
+    
+    #graphique pour chaque variable
+    par(mfrow=c(7,4))
+    for (j in 1:ncol(SelectVector)){
+        plot(carte,type="property",property=carte$codes[[1]][,j],palette.name=coolBlueHotRed,main=colnames(SelectVector)[j],cex=0.5)
+    }
+    par(mfrow=c(1,1))
+    return(0)
 }
 
 
@@ -262,34 +266,40 @@ test(4)
 test(5)
 #################################toroidal-----------------------------
 thor<-function(n){
-set.seed(100)
-carte_tor <-som(as.matrix(MyData.Vector),grid=somgrid(xdim = n, ydim = n, topo =  "hexagonal",
-neighbourhood.fct = "bubble", toroidal = TRUE))
-#summary
-print(summary(carte_tor))
-#architecture of the grid
-print(carte_tor$grid)
-
-#count plot
-plot(carte_tor,type="count",palette.name=degrade.bleu,main=paste("Carte de Kohonen toroidal n=",n*n))
-
-#noeud d’appartenance des observations
-print(carte_tor$unit.classif)
-#nombre d’observations affectés à chaque noeud
-nb <-table(carte_tor$unit.classif)
-print(nb)
-#check if there are empty nodes
-print(length(nb))
-
-#plot distance to neighbours
-plot(carte_tor,type="dist.neighbours")
-
-#codebooks–profils des noeuds
-plot(carte_tor,type="codes",codeRendering = "segments")
-#tableaudes codebooks pour les deux premiers noeuds
-print(carte_tor$codes[[1]][1:2,]) 
-
-return(0)
+    set.seed(100)
+    SelectVector<-MyData.Vector[, !apply(MyData.Vector == 0, 2, all)]
+    carte_tor <-som(as.matrix(SelectVector),grid=somgrid(xdim = n, ydim = n, topo =  "hexagonal",
+                                                         neighbourhood.fct = "bubble", toroidal = TRUE))
+    #summary
+    print(summary(carte_tor))
+    #architecture of the grid
+    print(carte_tor$grid)
+    
+    #count plot
+    plot(carte_tor,type="count",palette.name=degrade.bleu,main=paste("Carte de Kohonen toroidal n=",n*n))
+    
+    #noeud d’appartenance des observations
+    print(carte_tor$unit.classif)
+    #nombre d’observations affectés à chaque noeud
+    nb <-table(carte_tor$unit.classif)
+    print(nb)
+    #check if there are empty nodes
+    print(length(nb))
+    
+    #plot distance to neighbours
+    plot(carte_tor,type="dist.neighbours")
+    
+    #codebooks–profils des noeuds
+    plot(carte_tor,type="codes",codeRendering = "segments")
+    #tableaudes codebooks pour les deux premiers noeuds
+    print(carte_tor$codes[[1]][1:2,]) 
+    #graphique pour chaque variable
+    par(mfrow=c(7,4))
+    for (j in 1:ncol(SelectVector)){
+        plot(carte_tor,type="property",property=carte_tor$codes[[1]][,j],palette.name=coolBlueHotRed,main=colnames(SelectVector)[j],cex=0.5)
+    }
+    par(mfrow=c(1,1))
+    return(0)
 }
 
 thor(2)
@@ -299,4 +309,5 @@ thor(3)
 thor(4)
 
 thor(5)
+
 dev.off()
