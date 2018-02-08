@@ -17,8 +17,8 @@ library(ProjectionBasedClustering)
 variable <- commandArgs(trailingOnly=TRUE)
 
 #lecture du fichier csv
-#MyData <- read.csv(file="~/Bureau/projet_long/result/other/vecteur_db.csv", header=TRUE, sep=";",stringsAsFactors=FALSE)
-MyData <- read.csv(file=variable[1], header=TRUE, sep=";",stringsAsFactors=FALSE)
+MyData <- read.csv(file="~/Bureau/projet_long/result/other/vecteur_db.csv", header=TRUE, sep=";",stringsAsFactors=FALSE)
+#MyData <- read.csv(file=variable[1], header=TRUE, sep=";",stringsAsFactors=FALSE)
 
 MyData[is.na(MyData)] <- 0 #remplace les NA (s'il y en as) par des 0
 
@@ -44,10 +44,9 @@ MyData.Vector.pca <- prcomp(MyData.Vector)
 
 a=variable[2]
 pdf(paste(a,"cluster.pdf"))
-plot(MyData.Vector.pca, type = "l",main="Variances en fonction des Composantes Principales")
 summary(MyData.Vector.pca)
 
-
+fviz_eig(MyData.Vector.pca,addlabels=TRUE,ylim=c(0,50))
 
 
 # Plot
