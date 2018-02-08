@@ -227,7 +227,7 @@ print(carte$grid)
 
 
 #count plot
-plot(carte,type="count",palette.name=degrade.bleu,main=paste("Carte de Kohonen n=",n))
+plot(carte,type="count",palette.name=degrade.bleu,main=paste("Carte de Kohonen n=",n*n))
 
 #noeud d’appartenance des observations
 print(carte$unit.classif)
@@ -271,7 +271,7 @@ print(summary(carte_tor))
 print(carte_tor$grid)
 
 #count plot
-plot(carte_tor,type="count",palette.name=degrade.bleu,main=paste("Carte de Kohonen toroidal n=",n))
+plot(carte_tor,type="count",palette.name=degrade.bleu,main=paste("Carte de Kohonen toroidal n=",n*n))
 
 #noeud d’appartenance des observations
 print(carte_tor$unit.classif)
