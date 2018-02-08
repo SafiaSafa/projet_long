@@ -6,10 +6,7 @@
 # install.packages("rpart.plot")
 library("rpart")
 library("rpart.plot")
-#install.packages("caret",
-                 repos = "http://cran.r-project.org", 
-                 dependencies = c("Depends", "Imports", "Suggests"))
-#library('caret')
+
 #Récupération des arguments
 variable <- commandArgs(trailingOnly=TRUE)
 
@@ -101,8 +98,4 @@ print("Séquence prédites:")
 print(vec)
 
 
-print("Vérification de la validité du modèle en l'alignant sur nos données de test.")
-print(table(vec,MyData_t$AA))
-print(sensitivity(vec,MyData_t$AA))
-print(specificity(vec,MyData_t$AA))
 dev.off()

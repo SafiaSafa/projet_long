@@ -1,0 +1,12 @@
+[1] "Séquence prédites:"
+  [1] "E" "R" "N" "N" "N" "K" "N" "N" "E" "N" "I" "N" "N" "I" "N" "N" "Y" "I"
+ [19] "N" "N" "N" "K" "I" "I" "I" "N" "I" "I" "I" "L" "I" "I" "N" "N" "W" "N"
+ [37] "R" "I" "N" "R" "N" "N" "F" "K" "W" "N" "F" "C" "F" "W" "N" "E" "C" "I"
+ [55] "N" "N" "I" "L" "F" "I" "L" "N" "N" "I" "K" "R" "N" "I" "N" "N" "C" "I"
+ [73] "N" "I" "I" "E" "N" "C" "Y" "N" "C" "M" "L" "N" "I" "I" "R" "N" "I" "K"
+ [91] "N" "N" "I" "K" "Y" "W" "E" "C" "L" "N" "K" "C" "C" "E" "C" "N" "I" "N"
+[109] "I" "I" "I" "M" "I" "I" "N" "N" "K" "W" "N" "R" "Y" "W" "N" "L" "E" "I"
+[127] "N" "N" "I" "I" "N" "C" "I" "I" "R" "C" "I" "C" "E" "I" "C" "W" "K" "N"
+[145] "K" "R"
+null device 
+          1 
