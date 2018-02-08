@@ -253,13 +253,13 @@ return(0)
 }
 
 
+test(2)
+
+test(3)
+
 test(4)
 
-test(9)
-
-test(16)
-
-test(25)
+test(5)
 #################################toroidal-----------------------------
 thor<-function(n){
 set.seed(100)
@@ -292,11 +292,11 @@ print(carte_tor$codes[[1]][1:2,])
 return(0)
 }
 
+thor(2)
+
+thor(3)
+
 thor(4)
 
-thor(9)
-
-thor(16)
-
-thor(25)
+thor(5)
 dev.off()
