@@ -2,8 +2,9 @@
 
 READ ME
 
-auteur: SAFA-TAHAR-HENNI Safia
-date: 09/02/2018
+*Auteur* : SAFA-TAHAR-HENNI Safia
+
+*Date* : 09/02/2018
 
 
 Ce programme permet de générer de score de compatibilité 1D-3D par un algorithme d’apprentissage automatique.
@@ -68,7 +69,7 @@ Repertoire:
 	
 	- data : contient un exemple de fichier pdb pour la prediction et un base de donné contenant 10 pdb issue de HOMSTRAD
 	
-	- doc : pdf du rapport de projet long
+	- doc : pdf du rapport de projet long et de la présentation oral
 	
 	- Resultat : contient les résultats de l'utilisation du programe sur les données contenu dans data 
 	
