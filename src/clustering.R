@@ -17,8 +17,7 @@ library(ProjectionBasedClustering)
 variable <- commandArgs(trailingOnly=TRUE)
 
 #lecture du fichier csv
-MyData <- read.csv(file="~/Bureau/projet_long/result/other/vecteur_db.csv", header=TRUE, sep=";",stringsAsFactors=FALSE)
-#MyData <- read.csv(file=variable[1], header=TRUE, sep=";",stringsAsFactors=FALSE)
+MyData <- read.csv(file=variable[1], header=TRUE, sep=";",stringsAsFactors=FALSE)
 
 MyData[is.na(MyData)] <- 0 #remplace les NA (s'il y en as) par des 0
 
@@ -184,7 +183,7 @@ colnames(mat)=colnames(nb_obs)
 rownames(mat)=rownames(nb_obs)
 print("Matrice des scores par cluster:")
 print(mat)
-#par(mfrow=c(2,dim(mat)[2]/2))
+
 for (i in 1:dim(mat)[2])
 {
   barplot(mat[,i],main='Distribution des scores (Méthode PAM)',xlab=paste("Cluster ",i),ylab="Score",ylim=c(4,-4))

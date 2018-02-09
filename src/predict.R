@@ -13,7 +13,6 @@ variable <- commandArgs(trailingOnly=TRUE)
 #lecture du fichier csv
 
 MyData <- read.csv(file=variable[1], header=TRUE, sep=";",stringsAsFactors=FALSE)
-#MyData <- read.csv(file="../result/test/vecteur_db.csv", header=TRUE, sep=";",stringsAsFactors=FALSE)
 
 MyData[is.na(MyData)] <- 0 #remplace les NA (s'il y en as) par des 0
 
@@ -39,7 +38,7 @@ MyData_train = MyData
 target= AA ~H_ss+B_ss+E_ss+G_ss+I_ss+T_ss+S_ss+X._ss+o_ss+o_ss+o_ss+o_ss+o_ss+o_ss+o_ss+o_ss+ACC+a_PB+b_PB+c_PB+d_PB+e_PB+f_PB+g_PB+h_PB+i_PB+j_PB+k_PB+l_PB+m_PB+n_PB+o_PB+p_PB+polar+ionic+hydrophobic+vdw+hydrogenB  
 
 
-#a="../result/test/"
+
 a=variable[3]
 pdf(paste(a,"predict.pdf"))
 fq_att=table(MyData$AA)
@@ -69,7 +68,6 @@ rpart.plot(tree_ms10, main = "Prunning: minsplit(nombre minimum d'observations d
 #lecture du fichier csv
 
 MyData_t<- read.csv(file=variable[2], header=TRUE, sep=";",stringsAsFactors=FALSE)
-#MyData_t <- read.csv(file="../result/test/vecteur_to_predict.csv", header=TRUE, sep=";",stringsAsFactors=FALSE)
 
 MyData_t[is.na(MyData_t)] <- 0 #remplace les NA (s'il y en as) par des 0
 
