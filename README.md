@@ -1,9 +1,10 @@
-# projet long: Méthode de génération de score de compatibilité 1D-3D par un algorithme d’apprentissage automatique
+# Projet Long: Méthode de génération de score de compatibilité 1D-3D par un algorithme d’apprentissage automatique
 
 READ ME
 
-auteur: SAFA-TAHAR-HENNI Safia
-date: 01/01/2018
+*Auteur* : SAFA-TAHAR-HENNI Safia
+
+*Date* : 09/02/2018
 
 
 Ce programme permet de générer de score de compatibilité 1D-3D par un algorithme d’apprentissage automatique.
@@ -20,13 +21,32 @@ python2 setup.py test
 ```
 Pour Arppegio vous aurez besoin des dépendances suivantes (https://bitbucket.org/harryjubb/arpeggio):
 
--Python (v2.7)
+- Python (v2.7)
 
--Numpy
+- Numpy
 
--BioPython (>= v1.60)
+- BioPython (>= v1.60)
 
--OpenBabel (with Python bindings)
+- OpenBabel (with Python bindings)
+
+
+Packages R (v3.4.2) nécessaire à l'exécution de ce programme:
+
+- rpart
+
+- rpart.plot
+
+- ggfortify
+
+- ggplot2
+
+- factoextra
+
+- cluster
+
+- kohonen
+
+- ProjectionBasedClustering
 
 Usage: 
 ```{r, engine='bash',count_lines}
@@ -49,7 +69,7 @@ Repertoire:
 	
 	- data : contient un exemple de fichier pdb pour la prediction et un base de donné contenant 10 pdb issue de HOMSTRAD
 	
-	- doc : pdf du rapport de projet long
+	- doc : pdf du rapport de projet long et de la présentation oral
 	
 	- Resultat : contient les résultats de l'utilisation du programe sur les données contenu dans data 
 	
